@@ -28,6 +28,7 @@ namespace SportFriends.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddDbContext<DataContext>(
                 x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
             );

@@ -1,3 +1,4 @@
+
 namespace SportFriends.API.Models
 {
     public class User
