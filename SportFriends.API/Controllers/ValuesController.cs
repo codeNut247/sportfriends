@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportFriends.API.Data;
@@ -6,6 +7,7 @@ using SportFriends.API.Models;
 
 namespace SportFriends.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController: ControllerBase
@@ -17,6 +19,13 @@ namespace SportFriends.API.Controllers
             this._context = context;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetValues(int id) 
+        {
+            return Ok(await _context.Values.FirstOrDefaultAsync(_ => _.Id == id));
+        }
+
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetValues() 
         {
