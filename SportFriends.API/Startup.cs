@@ -42,7 +42,8 @@ namespace SportFriends.API
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
                             .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                        ValidateIssuer = false
+                        ValidateIssuer = false,
+                        ValidateAudience = false
                     };
                 });
         }
