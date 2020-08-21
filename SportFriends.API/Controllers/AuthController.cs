@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using CodeNut247.DotNetCore.ApiAuth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -54,24 +55,15 @@ namespace SportFriends.API.Controllers
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
                 new Claim(ClaimTypes.Name, userFromRepo.UserName)
             };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(_config.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor() {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            
+            JwtBuilder tokenbBuilder = 
+                new JwtBuilder(
+                    claims, 
+                    _config.GetSection("AppSettings:Token").Value,
+                    DateTime.Now.AddHours(1));
 
             return Ok(new {
-                token = tokenHandler.WriteToken(token)
+                token = tokenbBuilder.BuildToken()
             });
         }
 
